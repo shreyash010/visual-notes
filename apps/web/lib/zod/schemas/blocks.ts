@@ -1,5 +1,5 @@
 import z from "@/lib/zod"
-import { TLEditorSnapshot } from "@tldraw/tldraw"
+import { TLEditorSnapshot } from "tldraw"
 
 export const BlockPropertiesSchema = z.object({
     text: z.string().optional().describe("The text content of the block."),
@@ -7,6 +7,7 @@ export const BlockPropertiesSchema = z.object({
     icon: z.string().optional().describe("The icon of the block."),
     x: z.number().optional().describe("The x coordinate of the block."),
     y: z.number().optional().describe("The y coordinate of the block."),
+    favourite: z.boolean().optional().describe("Whether the block is a favourite.").default(false),
     meta: z.object({
         id: z.string().uuid()
     }).optional().describe("The meta data of the block."),
@@ -23,6 +24,10 @@ export const BlockPropertiesSchema = z.object({
     rotation: z.number().optional().describe("The rotation of the block."),
     typeName: z.string().optional().describe("The type name of the block."),
     editorContent: z.any().optional().describe("The editor content of the block."),
+    notePreviewMapping: z.array(z.object({
+        shapeId: z.string().uuid(),
+        noteBlockId: z.string().uuid()
+    })).optional().describe("The note preview mapping of the block."),
 })
 
 export const BlocksSchema = z.object({
@@ -36,6 +41,7 @@ export const BlocksSchema = z.object({
       z.any() // For Tiptap editor snapshot
     ]).optional().describe("Snapshot of the block (TLEditorSnapshot or Tiptap editor snapshot)"),
     active: z.boolean().optional().describe("Whether the block is active.").default(true),
+    created_at: z.date().optional().describe("The creation date of the block.").default(new Date()),
 })
 
 
